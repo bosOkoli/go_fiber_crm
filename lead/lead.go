@@ -12,7 +12,7 @@ type Lead struct {
 	Name    string `json:"name"`
 	Company string `json:"company"`
 	Email   string `json:"email"`
-	Phone   int    `json:"phone"`
+	Phone   string `json:"phone"`
 }
 
 func GetLeads(c *fiber.Ctx) {
@@ -49,9 +49,11 @@ func DeleteLead(c *fiber.Ctx) {
 
 	db.First(&lead, id)
 	if lead.Name == "" {
-		c.Status(500).Send("No lead found with this id: %v", id)
+		c.Status(500)
+		c.Send("No lead found with this id")
 	}
-	db.Delete(lead)
-	c.Send("Lead successfully deleted")
+	db.Delete(&lead)
+	c.Send("Lead successfully deleted!!")
+	c.JSON(lead)
 
 }
